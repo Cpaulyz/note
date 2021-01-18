@@ -233,6 +233,11 @@ Q的初始化：
 
 <img src="https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210115231352685.png" alt="image-20210115231352685" style="zoom:67%;" />
 
+> ∅ (注意: 它不是正则表达式) 的规定 
+>
+> * ∅r = r∅ = ∅ 
+> * ∅|r = r
+
 ### 5.2 算法
 
 <img src="https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210115231325445.png" alt="image-20210115231325445" style="zoom:67%;" />

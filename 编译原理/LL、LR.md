@@ -1,6 +1,6 @@
-## FIRST&FOLLOW
+## 1 FIRST&FOLLOW
 
-### FIRST集合
+### 1.1 FIRST集合
 
 First(α) 是可从 α 推导得到的句型的**首终结符号**的集合
 
@@ -16,7 +16,7 @@ First(α) 是可从 α 推导得到的句型的**首终结符号**的集合
 
 	<img src="https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116150518674.png" alt="image-20210116150518674" style="zoom:67%;" />
 
-### FOLLOW集合
+### 1.2 FOLLOW集合
 
 Follow(A) 是可能在某些句型中紧跟在 A 右边的终结符的集合
 
@@ -28,7 +28,7 @@ Follow(A) 是可能在某些句型中紧跟在 A 右边的终结符的集合
 
 	<img src="https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116150743310.png" alt="image-20210116150743310" style="zoom:67%;" />
 
-## LL(1)
+## 2 LL(1)
 
 如果文法 G 的预测分析表是无冲突的, 则 G 是 LL(1) 文法
 
@@ -40,7 +40,7 @@ Follow(A) 是可能在某些句型中紧跟在 A 右边的终结符的集合
 * L : 构建最左 (leftmost) 推导 
 * 1 : 只需向前看一个输入符号便可确定使用哪条产生式
 
-### 构建预测分析表
+### 2.1 构建预测分析表
 
 先计算FIRST、FOLLOW集合
 
@@ -52,9 +52,13 @@ Follow(A) 是可能在某些句型中紧跟在 A 右边的终结符的集合
 
 <img src="https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116152249859.png" alt="image-20210116152249859" style="zoom:67%;" />
 
-### 改造为LL(1)
+### 2.2 改造为LL(1)
 
-#### 消除左递归
+#### 2.2.1 提取左公因子
+
+<img src="https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116153257570.png" alt="image-20210116153257570" style="zoom:67%;" />
+
+#### 2.2.2 消除左递归
 
 * 直接左递归的消除方法：
 
@@ -84,17 +88,13 @@ Follow(A) 是可能在某些句型中紧跟在 A 右边的终结符的集合
 
 	<img src="https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116153234519.png" alt="image-20210116153234519" style="zoom:67%;" />
 
-#### 提取左公因子
-
-<img src="https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116153257570.png" alt="image-20210116153257570" style="zoom:67%;" />
-
-### LL(1)语法分析器伪代码
+### 2.3 LL(1)语法分析器伪代码
 
 <img src="https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116145239560.png" alt="image-20210116145239560" style="zoom:80%;" />
 
-## LR
+## 3 LR
 
-### 什么是LR
+### 3.1 什么是LR
 
 L : 从左向右 (Left-to-right) 扫描输入 
 
@@ -109,7 +109,7 @@ R : 构建反向 (Reverse) 最右推导
 * **何时规约？**
 * **按哪条产生式规约？**
 
-### LR分析表
+### 3.2 LR分析表
 
 <img src="https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116154817549.png" alt="image-20210116154817549" style="zoom:67%;" />
 
@@ -135,9 +135,9 @@ R : 构建反向 (Reverse) 最右推导
 
 * Theorem 存在一种 LR 语法分析方法, 保证句柄总是出现在栈顶
 
-## LR(0)
+## 4 LR(0)
 
-### LR(0)文法
+### 4.1 LR(0)文法
 
 **如果文法G的LR(0)分析表是无冲突的，则G是LR(0)文法**
 
@@ -149,7 +149,7 @@ R : 构建反向 (Reverse) 最右推导
 
 * 0 : 归约时无需向前看
 
-### LR(0)自动机
+### 4.2 LR(0)自动机
 
 **Definition (LR(0) 项 (Item))** 
 
@@ -183,7 +183,7 @@ R : 构建反向 (Reverse) 最右推导
 
 ![image-20210116160058568](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116160058568.png)
 
-### 构造LR(0)自动机
+### 4.3 构造LR(0)自动机
 
 需要知道的：闭包的计算
 
@@ -211,7 +211,7 @@ R : 构建反向 (Reverse) 最右推导
 
 	**千万不要漏掉accept！**
 
-### 构造LR(0)分析表
+### 4.4 构造LR(0)分析表
 
 1. 先构造出LR(0)自动机，每个自动机的状态对应LR(0)分析表中的一个状态
 
@@ -221,23 +221,23 @@ R : 构建反向 (Reverse) 最右推导
 
 3. 如果文法 G 的LR(0) 分析表是无冲突的, 则 G 是 LR(0) 文法
 
-## SLR(1)
+## 5 SLR(1)
 
 Simple LR(1)
 
-### LR(0)存在的问题
+### 5.1 LR(0)存在的问题
 
 LR(0) 分析表每一行 (状态) 所选用的归约产生式是相同的
 
-### 改进
+### 5.2 改进
 
 对LR(0)的规约规则进行改进
 
 <img src="https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116163930031.png" alt="image-20210116163930031" style="zoom:67%;" />
 
-## LR(1)
+## 6 LR(1)
 
-### LR(0)与SLR(1)存在的问题
+### 6.1 LR(0)与SLR(1)存在的问题
 
 * LR0
 
@@ -247,7 +247,7 @@ LR(0) 分析表每一行 (状态) 所选用的归约产生式是相同的
 
 	<img src="https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116164433903.png" alt="image-20210116164433903" style="zoom:67%;" />
 
-### LR(1)项
+### 6.2 LR(1)项
 
 **Definition (LR(1) 项 (Item))** 
 
@@ -257,7 +257,7 @@ LR(0) 分析表每一行 (状态) 所选用的归约产生式是相同的
 
 也就是说，[A → α·, a]只有下一个输入符号为 a 时, 才可以按照 A → α 进行归约
 
-### LR(1)自动机
+### 6.3 LR(1)自动机
 
 * LR1闭包计算
 
@@ -276,24 +276,24 @@ LR(0) 分析表每一行 (状态) 所选用的归约产生式是相同的
 	<img src="https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116164748274.png" alt="image-20210116164748274" style="zoom:67%;" />
 
 	
-### LR(1)分析表
+### 6.4 LR(1)分析表
 <img src="https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116170629909.png" alt="image-20210116170629909" style="zoom:67%;" />
 
-## LALR(1)
+## 7 LALR(1)
 
-### LR(1)的问题
+### 7.1 LR(1)的问题
 
 LR(1) 虽然强大, 但是生成的 LR(1) 分析表可能过大, 状态过多
 
 LALR(1) : 合并具有相同核心 LR(0)项的状态 (忽略不同的向前看符号)
 
-### 合并核心项
+### 7.2 合并核心项
 
 <img src="https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116171016290.png" alt="image-20210116171016290" style="zoom: 80%;" />
 
 例如，合并图中的(4,7),(3,6),(8,9)
 
-### 引入冲突？
+### 7.3 引入冲突？
 
 对于 LR(1) 文法, 合并得到的 LALR(1) 分析表是否会引入冲突？
 
@@ -305,3 +305,20 @@ LALR(1) : 合并具有相同核心 LR(0)项的状态 (忽略不同的向前看�
 
 * **可能会**引入**归约/归约**冲突
 
+## 8 例题
+
+### 8.1 LR0、SLR1
+
+![image-20210116232017203](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116232017203.png)
+
+![image-20210116232034684](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116232034684.png)
+
+![image-20210116232041655](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116232041655.png)
+
+### 8.2 LR1、LALR1
+
+![image-20210116232100595](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116232100595.png)
+
+![image-20210116232108019](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116232108019.png)
+
+![image-20210116232114937](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210116232114937.png)
