@@ -1,4 +1,4 @@
-# Nginx
+# Nginx：Docker部署与负载均衡开发实践
 
 [TOC]
 
@@ -287,7 +287,11 @@ http {
 }
 ```
 
-注意，修改完以后需要`docker restatr nginx-test`重启容器
+> 注意
+>
+> * 由于是docker部署，虽然是同一台服务器，但是不能用127.0.0.1，仍需要使用局域网IP
+>
+> * 修改完以后需要`docker restatr nginx-test`重启容器
 
 之后，向`http://39.97.124.144:80/test/test`发送请求，观察两个web应用，实现了负载均衡
 
