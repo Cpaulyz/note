@@ -48,3 +48,5 @@
 
 固定IP：https://blog.csdn.net/readiay/article/details/50866709
 
+部署手册：https://gitee.com/moxi159753/LearningNotes/tree/master/K8S/3_%E4%BD%BF%E7%94%A8kubeadm%E6%96%B9%E5%BC%8F%E6%90%AD%E5%BB%BAK8S%E9%9B%86%E7%BE%A4
+
