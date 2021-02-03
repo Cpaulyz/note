@@ -60,7 +60,7 @@ Eureka包含两个组件：Eureka Server和Eureka Clien**t**
 > 3. 开启功能 enablexxxx
 > 4. 配置类
 
-### eureka注册中心
+### 2.1 eureka注册中心
 
 创建新module
 
@@ -159,7 +159,7 @@ public class EurekaServer_7001 {
 
 > 在springcloud-provider-dept-8001中操作
 
-### provider微服务注册
+### 3.1 provider微服务注册
 
 在pom.xml中新增
 
@@ -191,7 +191,7 @@ eureka:
 
 > 
 
-### eureka自我保护机制
+### 3.2 eureka自我保护机制
 
 一句话总结就是：**某时刻某一个微服务不可用，eureka不会立即清理，依旧会对该微服务的信息进行保存！**
 
@@ -201,7 +201,7 @@ eureka:
 
 > 更详细的介绍可以参考[Eureka自我保护机制](https://blog.csdn.net/wudiyong22/article/details/80827594)
 
-### 拓展：开启微服务的actuator-info
+### 3.3 拓展：开启微服务的actuator-info
 
 > 一般在团队开发协作中使用
 
@@ -234,7 +234,7 @@ info:
 
 ![image-20210203150153819](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210203150153819.png)
 
-### 拓展：获取注册进来的微服务的信息
+### 3.4 拓展：获取注册进来的微服务的信息
 
 > 一般在团队开发协作中使用
 
@@ -294,7 +294,7 @@ public class DeptProvider_8001 {
 
 > 在2中，我们构建的是单机的Eureka Server，为了做到高可用，实际开发中一般会用到集群，这里模拟集群Eureka Server的构建
 
-### 构建注册中心集群
+### 4.1 构建注册中心集群
 
 为了模拟在本地配置集群，需要修改一下hosts文件，新增以下条目
 
@@ -333,7 +333,7 @@ server:
 
 ![image-20210203155446742](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210203155446742.png)
 
-### 向集群注册服务
+### 4.2 向集群注册服务
 
 修改springcloud-provider-dept-8001的application.yml，向集群注册
 
