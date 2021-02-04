@@ -189,8 +189,6 @@ eureka:
 
 ![image-20210203143936605](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210203143936605.png)
 
-> 
-
 ### 3.2 eureka自我保护机制
 
 一句话总结就是：**某时刻某一个微服务不可用，eureka不会立即清理，依旧会对该微服务的信息进行保存！**
