@@ -1,6 +1,8 @@
-# SpringCloud(三)：Eureka服务注册与发现
+# SpringCloud(三)：Eureka与服务注册
 
 [TOC]
+
+> 本文介绍SpringCloud中Eureka的单机/集群构建，与将服务注册到Eureka的过程。服务发现将在Ribbon章节中进行介绍。
 
 ## 1 Eureka简介
 
@@ -297,6 +299,10 @@ public class DeptProvider_8001 {
 为了模拟在本地配置集群，需要修改一下hosts文件，新增以下条目
 
 ![image-20210203155029989](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210203155029989.png)
+
+如果是在windows下，记得刷新dns：`ipconfig /flushdns`
+
+![image-20210205165144101](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210205165144101.png)
 
 按照之前构建单机Eureka Server的步骤，构建三个module，内容基本类似，这里不再赘述
 

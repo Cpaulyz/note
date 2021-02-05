@@ -6,7 +6,7 @@
 
 ## 1 项目总结构
 
-![image-20210202213204950](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210202213204950.png)
+![image-20210205172458180](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210205172458180.png)
 
 ## 2 父项目
 
@@ -364,9 +364,9 @@ public class DeptController {
 }
 ```
 
-## 5 springcloud-consumer-dept-8002
+## 5 springcloud-consumer-dept-80
 
-在父项目下创建module，选择maven，名字为springcloud-consumer-dept-8002
+在父项目下创建module，选择maven，名字为springcloud-consumer-dept-80
 
 pom.xml
 
@@ -382,7 +382,7 @@ pom.xml
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>springcloud-consumer-dept-8002</artifactId>
+    <artifactId>springcloud-consumer-dept-80</artifactId>
 
     <dependencies>
         <dependency>
@@ -407,7 +407,7 @@ application.yml
 
 ```YML
 server:
-  port: 8002
+  port: 80
 ```
 
 DeptConsumerController.java
@@ -464,9 +464,9 @@ public class BeanConfig {
 
 ```java
 @SpringBootApplication
-public class DeptConsumer_8002 {
+public class DeptConsumer_80 {
     public static void main(String[] args) {
-        SpringApplication.run(DeptConsumer_8002.class,args);
+        SpringApplication.run(DeptConsumer_80.class,args);
     }
 }
 ```
@@ -481,8 +481,10 @@ public class DeptConsumer_8002 {
 
 * springcloud-provider-dept-8001
 
-* springcloud-consumer-dept-8002
+* springcloud-consumer-dept-80
 
 简单测一下
 
 ![image-20210202213003941](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210202213003941.png)
+
+![image-20210205172355552](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210205172355552.png)
