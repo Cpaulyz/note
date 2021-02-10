@@ -149,8 +149,3 @@ public class DeptProviderHystrix_8001 {
 [Hystrix官网](https://github.com/Netflix/Hystrix/wiki)
 
 [Hystrix介绍](https://www.cnblogs.com/cjsblog/p/9391819.html)
-
-[视频：狂神说Spring Cloud](https://www.bilibili.com/video/BV1jJ411S7xr)
-
-[狂神说SpringCloud学习笔记](https://blog.csdn.net/weixin_43591980/article/details/106255122#t1)
-
