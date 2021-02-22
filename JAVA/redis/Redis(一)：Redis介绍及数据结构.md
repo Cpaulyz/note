@@ -1,8 +1,12 @@
-# Redis
+# Redis(一)：Redis介绍及数据结构
 
-## Redis介绍
+[TOC]
 
-### 什么是redis
+
+
+## 1 Redis介绍
+
+### 1.1 什么是redis
 
 **RE**mote **DI**ctionary **S**erver 远程字典服务器
 
@@ -14,7 +18,7 @@ Redis 与其他 key - value 缓存产品有以下三个特点：
 
 > KV+cache+persistenc
 
-### 能干什么
+### 1.2 能干什么
 
 - 内存存储和持久化：redis支持异步将内存中的数据写到硬盘上，同时不影响继续服务
 - 取最新N个数据的操作，如：可以将最新的10条评论的ID放在Redis的List集合里面
@@ -22,9 +26,9 @@ Redis 与其他 key - value 缓存产品有以下三个特点：
 - 发布、订阅消息系统
 - 定时器、计数器
 
-## HelloWorld
+## 2 HelloWorld
 
-### 安装
+### 2.1 安装
 
 ```shell
 wget http://download.redis.io/releases/redis-6.0.6.tar.gz
@@ -51,7 +55,7 @@ echo "source /opt/rh/devtoolset-9/enable" >>/etc/profile
 
 ![image-20210218172739704](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210218172739704.png)
 
-### hello world
+### 2.2 hello world
 
 修改redis文件夹下的配置文件`redis.conf`
 
@@ -63,7 +67,7 @@ echo "source /opt/rh/devtoolset-9/enable" >>/etc/profile
 
 ![image-20210218173820374](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210218173820374.png)
 
-### redis启动后的杂项知识
+### 2.3 redis启动后的杂项知识
 
 * 性能测试：启动服务后，运行`/usr/local/bin/redis-benchmark`
 
@@ -96,9 +100,9 @@ echo "source /opt/rh/devtoolset-9/enable" >>/etc/profile
 
 * 默认端口是6379
 
-## 数据类型
+## 3 数据类型
 
-### 五大数据类型
+### 3.1 五大数据类型
 
 - String（字符串）   
 	- string是redis最基本的类型，你可以理解成与Memcached一模一样的类型，一个key对应一个value。
@@ -120,6 +124,8 @@ echo "source /opt/rh/devtoolset-9/enable" >>/etc/profile
 - 哪里去获得redis常见数据类型操作命令   
 	- [Redis 命令参考](http://redisdoc.com/)
 	- [Redis 官网命令参考](https://redis.io/commands)
+
+## API
 
 ### key关键字
 
@@ -157,7 +163,8 @@ echo "source /opt/rh/devtoolset-9/enable" >>/etc/profile
 
 ### String
 
-单值单value
+> 单值单value
+>
 
 #### 常用
 
@@ -202,7 +209,8 @@ echo "source /opt/rh/devtoolset-9/enable" >>/etc/profile
 
 ### List
 
-单值多value，可重复
+> 单值多value，可重复
+>
 
 #### 常用
 
@@ -248,7 +256,8 @@ echo "source /opt/rh/devtoolset-9/enable" >>/etc/profile
 
 ### Set
 
-单值多value，不可重复
+> 单值多value，不可重复
+>
 
 #### 常用
 
@@ -293,3 +302,111 @@ echo "source /opt/rh/devtoolset-9/enable" >>/etc/profile
 	- 差集：sdiff key1 key2 在key1里但是不在key2里
 	- 交集：sinter key1 key2
 	- 并集：sunion key1 key2 
+
+### Hash
+
+> KV模式不变，但V是一个键值对
+
+#### 常用
+
+| 命令                                           | 描述                                                     |
+| ---------------------------------------------- | -------------------------------------------------------- |
+| HDEL key field1 [field2]                       | 删除一个或多个哈希表字段                                 |
+| HEXISTS key field                              | 查看哈希表 key 中，指定的字段是否存在。                  |
+| HGET key field                                 | 获取存储在哈希表中指定字段的值。                         |
+| HGETALL key                                    | 获取在哈希表中指定 key 的所有字段和值                    |
+| HINCRBY key field increment                    | 为哈希表 key 中的指定字段的整数值加上增量 increment 。   |
+| HINCRBYFLOAT key field increment               | 为哈希表 key 中的指定字段的浮点数值加上增量 increment 。 |
+| HKEYS key                                      | 获取所有哈希表中的字段                                   |
+| HLEN key                                       | 获取哈希表中字段的数量                                   |
+| HMGET key field1 [field2]                      | 获取所有给定字段的值                                     |
+| HMSET key field1 value1 [field2 value2 ]       | 同时将多个 field-value (域-值)对设置到哈希表 key 中。    |
+| HSET key field value                           | 将哈希表 key 中的字段 field 的值设为 value 。            |
+| HSETNX key field value                         | 只有在字段 field 不存在时，设置哈希表字段的值。          |
+| HVALS key                                      | 获取哈希表中所有值。                                     |
+| HSCAN key cursor [MATCH pattern] [COUNT count] | 迭代哈希表中的键值对。                                   |
+
+#### 案例
+
+- **hset/hget/hmset/hmget/hgetall/hdel**
+
+	![image-20210221231404385](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210221231404385.png)
+
+- hlen
+
+- hexists key 在key里面的某个值的key
+
+	![image-20210221231541816](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210221231541816.png)
+
+- hkeys/hvals
+
+	![image-20210221231625192](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210221231625192.png)
+
+- hincrby/hincrbyfloat
+
+- hsetnx
+
+### ZSet
+
+> 在set基础上，加一个score值。 之前set是k1 v1 v2 v3， 现在zset是k1 score1 v1 score2 v2
+
+#### 常用
+
+| 命令                                           | 描述                                                         |
+| ---------------------------------------------- | ------------------------------------------------------------ |
+| ZADD key score1 member1 [score2 member2]       | 向有序集合添加一个或多个成员，或者更新已存在成员的分数       |
+| ZCARD key                                      | 获取有序集合的成员数                                         |
+| ZCOUNT key min max                             | 计算在有序集合中指定区间分数的成员数                         |
+| ZINCRBY key increment member                   | 有序集合中对指定成员的分数加上增量 increment                 |
+| ZINTERSTORE destination numkeys key [key …]    | 计算给定的一个或多个有序集的交集并将结果集存储在新的有序集合 key 中 |
+| ZLEXCOUNT key min max                          | 在有序集合中计算指定字典区间内成员数量                       |
+| ZRANGE key start stop [WITHSCORES]             | 通过索引区间返回有序集合指定区间内的成员                     |
+| ZRANGEBYLEX key min max [LIMIT offset count]   | 通过字典区间返回有序集合的成员                               |
+| ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT] | 通过分数返回有序集合指定区间内的成员                         |
+| ZRANK key member                               | 返回有序集合中指定成员的索引                                 |
+| ZREM key member [member …]                     | 移除有序集合中的一个或多个成员                               |
+| ZREMRANGEBYLEX key min max                     | 移除有序集合中给定的字典区间的所有成员                       |
+| ZREMRANGEBYRANK key start stop                 | 移除有序集合中给定的排名区间的所有成员                       |
+| ZREMRANGEBYSCORE key min max                   | 移除有序集合中给定的分数区间的所有成员                       |
+| ZREVRANGE key start stop [WITHSCORES]          | 返回有序集中指定区间内的成员，通过索引，分数从高到低         |
+| ZREVRANGEBYSCORE key max min [WITHSCORES]      | 返回有序集中指定分数区间内的成员，分数从高到低排序           |
+| ZREVRANK key member                            | 返回有序集合中指定成员的排名，有序集成员按分数值递减(从大到小)排序 |
+| ZSCORE key member                              | 返回有序集中，成员的分数值                                   |
+| ZUNIONSTORE destination numkeys key [key …]    | 计算给定的一个或多个有序集的并集，并存储在新的 key 中        |
+| ZSCAN key cursor [MATCH pattern] [COUNT count] | 迭代有序集合中的元素（包括元素成员和元素分值）               |
+
+#### 案例
+
+- zadd/zrange   
+
+	- withscores
+
+		![image-20210221232017592](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210221232017592.png)
+
+- zrangebyscore key 开始score 结束score   
+
+	- withscores
+
+	- ( 不包含
+
+		![image-20210221232049928](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210221232049928.png)
+
+	- Limit 作用是返回限制     
+
+		- limit 开始下标步 多少步，类似分页
+
+			![image-20210221232133155](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210221232133155.png)
+
+- zrem key 某score下对应的value值，作用是删除元素
+
+- zcard/zcount key score区间/zrank key values值，作用是获得下标值/zscore key 对应值,获得分数
+
+	![image-20210221232347201](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210221232347201.png)
+
+- zrevrank key values值，作用是逆序获得下标值
+
+- zrevrange
+
+- zrevrangebyscore key 结束score 开始score
+
+	![image-20210221232521311](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210221232521311.png)
