@@ -5,3 +5,5 @@
 笔记：https://blog.csdn.net/u011863024/article/details/107476187
 
 笔记2：https://codekiller.top/2020/03/30/redis2/#sandian
+
+http://c.biancheng.net/view/4544.html
