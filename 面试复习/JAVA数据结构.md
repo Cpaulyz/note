@@ -304,13 +304,28 @@ loadFactor：负载因子，之前我们说了，Segment 数组不可以扩容�
 
 结构上和 Java8 的 HashMap 基本上一样，不过它要保证线程安全性，所以在源码上确实要复杂一些
 
-* 扩容
+#### 扩容
 
-	1、如果新增节点之后，所在链表的元素个数达到了阈值 8，则会调用`treeifyBin`方法把链表转换成红黑树，不过在结构转换之前，会对数组长度进行判断，实现如下：
+https://blog.csdn.net/ZOKEKAI/article/details/90051567
 
-	如果数组长度n小于阈值`MIN_TREEIFY_CAPACITY`，默认是64，则会调用`tryPresize`方法把数组长度扩大到原来的两倍，并触发`transfer`方法，重新调整节点的位置。
+1、如果新增节点之后，所在链表的元素个数达到了阈值 8，则会调用`treeifyBin`方法把链表转换成红黑树，不过在结构转换之前，会对数组长度进行判断，实现如下：
 
-	2、新增节点之后，会调用`addCount`方法记录元素个数，并检查是否需要进行扩容，当数组元素个数达到阈值时，会触发`transfer`方法，重新调整节点的位置。
+如果数组长度n小于阈值`MIN_TREEIFY_CAPACITY`，默认是64，则会调用`tryPresize`方法把数组长度扩大到原来的两倍，并触发`transfer`方法，重新调整节点的位置。
+
+2、新增节点之后，会调用`addCount`方法记录元素个数，并检查是否需要进行扩容，当数组元素个数达到阈值时，会触发`transfer`方法，重新调整节点的位置。
+
+扩容过程：
+
+1. 根据当前数组长度n，新建一个两倍长度的数组`nextTable`；
+2. 计算一个stride， 计算每条溴铵从处理的桶个数，如果小于16的话就设为16
+3. 初始化`ForwardingNode`节点，其中保存了新数组`nextTable`的引用，在处理完每个槽位的节点之后当做占位节点，表示该槽位已经处理过了；
+4. 循环扩容，一个槽一个槽处理，如果遇到某个槽中节点的hash为MOVE，也就是`ForwardingNode`，说明被其他线程处理过了，跳过，否则synchronized加锁扩容
+
+### 总结
+
+Java7 中 ConcruuentHashMap 使用的分段锁，也就是每一个 Segment 上同时只有一个线程可以操作，每一个 Segment 都是一个类似 HashMap 数组的结构，它可以扩容，它的冲突会转化为链表。但是 Segment 的个数一但初始化就不能改变。
+
+Java8 中的 ConcruuentHashMap 使用的 Synchronized 锁加 CAS 的机制。结构也由 Java7 中的 **Segment 数组 + HashEntry 数组 + 链表** 进化成了 **Node 数组 + 链表 / 红黑树**，Node 是类似于一个 HashEntry 的结构。它的冲突再达到一定大小时会转化成红黑树，在冲突小于一定数量时又退回链表。
 
 ## List
 
@@ -325,3 +340,39 @@ loadFactor：负载因子，之前我们说了，Segment 数组不可以扩容�
 [Java集合：LinkedList详解](https://joonwhee.blog.csdn.net/article/details/79247389)
 
 双向链表
+
+## String
+
+### String 
+
+字符串广泛应用 在Java 编程中，在 Java 中字符串属于对象，Java 提供了 String 类来创建和操作字符串。
+
+需要注意的是，String的值是不可变的，这就导致每次对String的操作都会生成**新的String对象**，这样不仅效率低下，而且大量浪费有限的内存空间。我们来看一下这张对String操作时内存变化的图：
+
+![image-20210323093104405](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210323093104405.png)
+
+https://blog.csdn.net/zp357252539/article/details/97916254
+
+注意点:
+
+* 这种直接通过双引号""声明字符串的方式, 虚拟机首先会到字符串常量池中查找该字符串是否已经存在. 如果存在会直接返回该引用, 如果不存在则会在堆内存中创建该字符串对象, 然后到字符串常量池中注册该字符串
+
+* 用new关键字创建字符串对象的时候, JVM将不会查询字符串常量池, 它将会直接在堆内存中创建一个字符串对象, 并返回给所属变量。
+
+* String类的源码中有对 intern()方法的详细介绍, 翻译过来的意思是: 当调用 intern()方法时, 首先会去常量池中查找是否有该字符串对应的引用, 如果有就直接返回该字符串; 如果没有, 就会在常量池中注册该字符串的引用, 然后返回该字符串。
+
+* 两个String对象相加的原理：创建一个StringBuilder对象，相加，然后调用toString，![image-20210323094609999](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210323094609999.png)
+
+	所以不会在字符串常量池中创建！
+
+### StringBuilder
+
+对于String, 凡是涉及到返回参数类型为String类型的方法, 在返回的时候都会通过new关键字创建一个新的字符串对象; 而对于StringBuilder, 大多数方法都会返回StringBuilder对象自身。
+
+内部***可变数组\***，存在初始化StringBuilder对象中***字符数组容量为16，存在扩容\***。
+
+以String为参数进行构造，在参数Str 数组长度的基础上再增加16个字符长度，作为StringBuilder实例的初始数组容量，并将str字符串 append到StringBuilder的数组中。
+
+### StringBuffer
+
+基本上与StringBuilder一致，但其为线程安全的字符串操作类，大部分方法都采用了Synchronized关键字修改，以此来实现在多线程下的操作字符串的安全性。

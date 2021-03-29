@@ -102,7 +102,7 @@ CPU有两个状态，分别是管态和目态，
 
 ## 进程是什么？有哪些定义？
 
-* 进程是一个具有一定独立功能的程序关于某个数据集合的一次运行活动 
+* 进程是一个**具有一定独立功能的程序关于某个数据集合的一次运行活动** 
 * 进程是操作系统进行资源分配和调度的一个独立单位
 * 进程的五个实体部分**（P,C,D,R,PSW）**
 	* (OS管理运行程序的)数据结构P 
@@ -361,3 +361,37 @@ https://zhuanlan.zhihu.com/p/63179839
 https://zhuanlan.zhihu.com/p/64138532
 
 https://zhuanlan.zhihu.com/p/64746509
+
+https://blog.csdn.net/daaikuaichuan/article/details/83862311
+
+https://blog.csdn.net/songchuwang1868/article/details/89877739/
+
+## 大端小端
+
+```c
+大端：高位字节排放在内存的低地址端，低位字节排放在内存的高地址端。（CPU对操作数的存放方式是从高字节到低字节）
+小端：低位字节排放在内存的低地址端，高位字节排放在内存的高地址端。（CPU对操作数的存放方式是从低字节到高字节）
+ 
+#include<stdio.h>
+int main()
+{
+  //小端模式：低地址存低字节
+  //大端模式：低地址存高字节
+ int temp = 0x1234; //x=0x1234,占两个字节,0x12是高字节,0x34在低字节
+ char *p = (char *)&temp;
+ 
+ printf("p[0] = %#x, p[1] = %#x\n",p[0], p[1]);
+ printf("*p = %#x\n",*p);
+ 
+ if(*p == 0x34)
+   printf("小端模式\n");
+ else if(*p == 0x12)
+   printf("大端模式\n");
+ 
+ return 0;
+}
+```
+
+![image-20210323162010344](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210323162010344.png)
+
+注：栈是高地址到低地址生长的
