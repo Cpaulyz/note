@@ -8,9 +8,19 @@ Linux是一个开发在GNU协议下的类Unix操作系统，具有以下特点
 * 流行
 * 支持多平台
 
+### 常见的发行版
+
+redhat -> fedora
+
+debian
+
+suse
+
+ubuntu
+
 ### **安装Linux**
 
-### **引导程序是用来干什么的**
+### **引导程序是用来干什么的***
 
 boot loader用来装载并启动linux内核。当机器引导它的操作系统时，BIOS 会读取引导介质上最前面的 512 字节（即人们所知的 *主引导记录（master boot record，MBR）*）由于 BIOS 只能访问很少量的数据，所以大部分引导加载程序分两个阶段进行引导。在引导的第一个阶段中，BIOS 引导一部分引导加载程序，即 *初始程序加载程序（initial program loader，IPL*）。IPL 查询分区表，从而能够加载位于不同介质上任意位置的数据。首先通过这步操作来定位第二阶段引导加载程序（其中包含加载程序的其余部分）。
 
@@ -28,8 +38,6 @@ boot loader用来装载并启动linux内核。当机器引导它的操作系统�
 
 ### **安装程序的命令**
 
-### **apt-get原理**
-
 `/etc/apt/sources.list`存放的是软件源站点
 
 * apt-get update
@@ -43,7 +51,7 @@ boot loader用来装载并启动linux内核。当机器引导它的操作系统�
 	3. 从软件源所指 的镜像站点中，下载相关软件包，并存放在/var/cache/apt/archive；
 	4. 解压软件包，并自动完成应用程序的安装和配置。
 
-### **文件类型**
+### **文件类型*** 
 
 （-）普通文件：纯文本文档、二进制文件、数据格式文件等 
 
@@ -76,7 +84,7 @@ boot loader用来装载并启动linux内核。当机器引导它的操作系统�
 * /home：用户的家目录的父目录
 * /root：root用户的家目录
 
-### **文件权限**
+### **文件权限***
 
 * 三个层次：所有者、所有者所在组、其他用户
 
@@ -104,17 +112,19 @@ boot loader用来装载并启动linux内核。当机器引导它的操作系统�
 
 	文件默认不能建立未执行文件，必须手工赋予执行权限，666-umask (644)
 
-	目录默认权限最大未777，777-umask (755)
+	目录默认权限最大为777，777-umask (755)
 
-### **进程的概念**
+### **进程的概念***
 
 进程是一个正在执行的程序实例。由执行程序、它的当前值、状态信息以及通过操作系统管理此进程执行情况的资源组成
 
 ### **层次图**
 
+![image-20210425214845335](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210425214845335.png)
+
 # ch1-2 Linux Basics2
 
-### 重定向
+### 重定向*
 
 * 标准输入、标准输出、标准错误
 	* 文件描述符：0,1,2
@@ -124,6 +134,7 @@ boot loader用来装载并启动linux内核。当机器引导它的操作系统�
 	* \>!：同上，但是强制覆盖
 	* \>>：同上，但是不覆盖而是在末尾追加
 	* <：将程序的输入重定向为某个程序
+	* << : 分解符，从标准输入中读入，直到遇到分界符停止
 
 > 重定向是Linux的重要机制，请描述Linux重定向的用途、使用方法、典型案例，并简要描述其实现机制
 
@@ -140,11 +151,11 @@ boot loader用来装载并启动linux内核。当机器引导它的操作系统�
 
 * 在进程创建时，内核为进程默认创建了0、1、2三个特殊的FD，这就是STDIN、STDOUT和STDERR
 
-* I/O重定向的过程中，不变的是FD 0/1/2代表STDIN/STDOUT/STDERR，变化的是文件描述符表中FD 0/1/2对应的具体文件，所以只需要使用dup2系统调用进行重定向即可。比如输出重定向：
+* I/O重定向的过程中，不变的是FD STDIN/STDOUT/STDERR代表0/1/2 ，变化的是文件描述符表中FD 0/1/2对应的具体文件，所以只需要使用dup2系统调用进行重定向即可。比如输出重定向：
 
 	```c
 	int fd_in = open("in.txt", O_RDONLY);
-	dup2(fd_in, 0);
+	dup2(fd_in,0);
 	...
 	```
 
@@ -157,6 +168,10 @@ boot loader用来装载并启动linux内核。当机器引导它的操作系统�
 看作业
 
 # ch2 Shell
+
+### 执行脚本文件
+
+
 
 # ch3-0 Programming Prerequisite
 
@@ -186,6 +201,12 @@ https://seisman.github.io/how-to-write-makefile/index.html
 
 > 为什么Linux引入makefile？和其他脚本的区别？使用makefile编译系统有哪些特点？
 
+为什么？
+
+一个工程有很多文件，每一个文件的改变都会导致工程的重新链接，但不是所有的文件都需要重新编译。makefile记录有文件的信息，在make时会决定在链接时重新编译哪些文件
+
+特定
+
 * **定义整个工程的编译规则**
 
 	makefile定义了一系列的规则来指定，哪些文件需要先编译，哪些文件需要后编译，哪些文件需要重新编译，甚至于进行更复杂的功能操作，因为makefile就像一个Shell脚本一样，其中也可以执行操作系统的命令。
@@ -195,6 +216,14 @@ https://seisman.github.io/how-to-write-makefile/index.html
 	makefile带来的好处就是——“自动化编译”，一旦写好，只需要一个make命令，整个工程完全自动编译，极大的提高了软件开发的效率
 
 make会一层又一层地去找文件的依赖关系，直到最终编译出第一个目标文件。在找寻的过程中，如果出现错误，比如最后被依赖的文件找不到，那么make就会直接退出，并报错，而对于所定义的命令的错误，或是编译不成功，make根本不理。make只管文件的依赖性
+
+> makefile执行次序
+
+1. 在当前目录下查找makefile或者Makefile
+2. 查找文件中的第一个目标文件（target）
+3. 如果target不存在或者依赖项的修改时间比target新，会根据后面所定义的规则来生成target
+4. 如果依赖的文件（如.o）不存在，那么makefile会在当前文件中找依赖文件的依赖项，并根据规则生成.o文件（类似堆栈的过程）
+5. make根据.o文件的规则生成.o文件，再用.o文件生成hello文件
 
 # ch3-1 System Programming
 
@@ -215,15 +244,15 @@ make会一层又一层地去找文件的依赖关系，直到最终编译出第�
 * 链接文件
 	类似Windows下面的快捷方式。第一个属性为 [l]，例如 [lrwxrwxrwx]
 
-### VFS主要原理（四种结构类型
+### VFS主要原理（四种结构类型）*
 
-VFS（Virtual Filesystem  Switch）称为虚拟文件系统或虚拟文件系统转换，是一个内核软件层，在具体的文件系统之上抽象的一层，用来处理与Posix文件系统相关的所有调用，表现为能够给各种文件系统提供一个通用的接口，使上层的应用程序能够使用通用的接口访问不同文件系统
+VFS（Virtual Filesystem  Switch）称为虚拟文件系统或虚拟文件系统转换，是一个==内核软件层==，在具体的文件系统之上抽象的一层，用来==处理与Posix文件系统相关的所有调用==，表现为==能够给各种文件系统提供一个通用的接口，使应用层的应用程序能够使用通用的接口访问不同文件系统==
 
 * super block 
 
 	超级块，一个超级块对应一个文件系统。
 
-* inode block
+* inode object
 
 	索引节点。一个实际存在的文件实体只有一个inode。inode对象全系统共用。
 
@@ -235,7 +264,7 @@ VFS（Virtual Filesystem  Switch）称为虚拟文件系统或虚拟文件系统
 
 	文件对象。一个打开了的文件对应一个file。file中有指向dentry的指针。文件对象是进程私有的（会以copy-on-write的方式与子进程共享）。一个文件对象包括的内容就是编程语言支持设置的各种文件打开的flag、mode，文件名称、当前的偏移等，其中非常重要的一个字段就是f_op，指向了当前文件所支持的操作集合。
 
-### 硬链接和软链接
+### 硬链接和软链接*
 
 > 硬链接与软链接的区别？（至少三点）用shell命令和函数如何创建？
 
@@ -278,6 +307,15 @@ VFS（Virtual Filesystem  Switch）称为虚拟文件系统或虚拟文件系统
 编程题，进程相关系统调用不要求掌握（Fork、execl），ioctl不考
 
 #### IO系统调用
+
+```c
+#include<unistd.h>
+#include<sys/stat.h>
+#include<sys/types.h>
+#include<fcntl.h>
+```
+
+
 
 IO系统调用围绕文件描述符fd，一个非负整数进行。标准输入、标准输出、标准错误对应的fd分别是STDIN_FILENO(0)，STDOUT_FILENO(1)，STDERR_FILENO(2)
 
@@ -347,7 +385,7 @@ IO系统调用围绕文件描述符fd，一个非负整数进行。标准输入�
 
 	dup复制一个文件文件描述符，返回新的
 
-	dup2复制oldfd到newfd，之前newfd对应的文件将被关闭。
+	dup2复制oldfd到newfd，*之前newfd对应的文件将被关闭。*
 
 	返回：新的文件描述符；出错则-1
 
@@ -367,13 +405,13 @@ IO系统调用围绕文件描述符fd，一个非负整数进行。标准输入�
 
 #### 进阶系统调用
 
-* `int stat(const char *filename, struct *buf);`
+* `int stat(const char *filename, struct stat *buf);`
 
   `int fstat(int fd, struct stat *buf);`
 
   `int lstat(const char *filename, struct stat *buf);`
 
-  获取文件的属性。最后一个是遇到符号链接时，能取到被链接的文件的属性（其他的只能取到链接文件自己的属性）。
+  获取文件的属性。lstat函数类似于stat但是当命名的文件是一个符号链接时，lstat返回该符号链接的有关信息，而不是由该符号链接引用文件的信息
 
   返回值：0；失败则-1
 
@@ -433,13 +471,17 @@ IO系统调用围绕文件描述符fd，一个非负整数进行。标准输入�
 
 * `int chown(const char *path, uid_t owner, gid_t group);`
 
-	`int fchown(int fd, uid_t owner, gid_t group);`
+  `int fchown(int fd, uid_t owner, gid_t group);`
 
-	`int lchown(const char *path, uid_t owner, gid_t group);`
+  `int lchown(const char *path, uid_t owner, gid_t group);`
 
-	更改文件的拥有者和组
+  更改文件的拥有者和组
 
-	返回值：0；失败则-1
+  chown 如果是符号链接，改变说的是真实指向的文件
+
+  lchown 如果是符号链接，改变的是本身
+
+  返回值：0；失败则-1
 
 * `mode_t umask(mode_t mask);`
 
@@ -539,7 +581,7 @@ IO系统调用围绕文件描述符fd，一个非负整数进行。标准输入�
 
 > Linux中文件描述符和文件指针FILE \*的区别是什么？
 
-* 文件描述符：在linux系统中打开文件就会获得文件描述符，它是个很小的正整数。每个进程在PCB（Process Control Block）中保存着一份文件描述符表，文件描述符就是这个表的索引，每个表项都有一个指向已打开文件的指针。
+* 文件描述符：在linux系统中打开文件就会获得文件描述符，它是个很小的正整数。每个进程在PCB（Process Control Block）中保存着一份文件表，文件描述符就是这个表的索引，每个表项都有一个指向已打开文件的指针。
 * 文件指针：C语言中使用文件指针做为I/O的句柄。文件指针指向进程用户区中的一个被称为FILE结构的数据结构。FILE结构包括一个缓冲区和一个文件描述符。而文件描述符是文件描述符表的一个索引，因此从某种意义上说文件指针就是句柄的句柄
 
 #### IO库函数
@@ -664,7 +706,7 @@ IO系统调用围绕文件描述符fd，一个非负整数进行。标准输入�
 
 * `int fgetpos(FILE *fp, fpos_t *pos);`
 
-	`int fsetpost(FILE *fp, const fpos_t *pos);`
+	`int fsetpos(FILE *fp, const fpos_t *pos);`
 
 	也用来获取/移动位置，向/从pos参数存放/读取位置信息。新增这两个函数是为了处理大到超出long int范围的文件
 
@@ -710,7 +752,7 @@ IO系统调用围绕文件描述符fd，一个非负整数进行。标准输入�
 
   	如果属主位没有x权限,会显示为大写S,表示有故障(权限无效) 
 
-  	启动为进程之后，其进程的属主为原程序文件的属主；
+  	==启动进程之后，其进程的属主为原程序文件的属主；==
 
   * SGID
 
@@ -724,9 +766,9 @@ IO系统调用围绕文件描述符fd，一个非负整数进行。标准输入�
 
     如果属组位没有x权限,会显示为大写S,表示有故障(权限无效) 
 
-    * 作用在二进制程序上时：执行sgid权限的程序时,此用户将继承此程序的所属组权限
+    * ==作用在二进制程序上时：执行sgid权限的程序时,此用户将继承此程序的所属组权限==
 
-    * 作用于目录上时：此文件夹下所有用户新建文件都自动继承此目录的用户组
+    * ==作用于目录上时：此文件夹下所有用户新建文件都自动继承此目录的用户组==
 
   * Sticky bit
 
@@ -742,13 +784,13 @@ IO系统调用围绕文件描述符fd，一个非负整数进行。标准输入�
 
   	 如果other位没有x权限,会显示为大写T,表示有故障(权限无效) 
 
-  	* 对于一个多人可写的目录，如果设置了sticky，则每个用户仅能删除和改名自己的文件或目录；
-  	* 只能作用在目录上.普通文件设置无意义,且会被linux内核忽略
-  	* 用户在设置Sticky权限的目录下新建的目录不会自动继承Sticky权限 
+  	* ==对于一个多人可写的目录，如果设置了sticky，则每个用户仅能删除和改名自己的文件或目录；==
+  	* ==只能作用在目录上.普通文件设置无意义,且会被linux内核忽略==
+  	* ==用户在设置Sticky权限的目录下新建的目录不会自动继承Sticky权限== 
 
   https://www.cnblogs.com/Q--T/p/7864795.html
 
-### 文件锁（特殊类型不要求掌握），锁标志位不要求，怎样创建、释放锁的系统调用要求掌握
+### 文件锁（特殊类型不要求掌握），锁标志位不要求，怎样创建、释放锁的系统调用要求掌握*
 
 * 记录锁
 
@@ -768,7 +810,7 @@ IO系统调用围绕文件描述符fd，一个非负整数进行。标准输入�
 
 # ch4 内核与驱动
 
-### 什么是内核
+### 什么是内核*
 
 ![image-20210422151155280](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210422151155280.png)
 
@@ -778,7 +820,7 @@ IO系统调用围绕文件描述符fd，一个非负整数进行。标准输入�
 
 https://www.cnblogs.com/klb561/p/9236420.html
 
-### 内核模块和应用程序的区别
+### 内核模块和应用程序的区别*
 
 ![image-20210422152622341](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210422152622341.png)
 
@@ -791,23 +833,156 @@ https://www.cnblogs.com/klb561/p/9236420.html
 
 ### 字符型设备驱动
 
+> **字符设备和块设备区别并举出相应实例？**
+>
+> 字符设备按照字符流的方式被有序访问；块设备能够随机（不需要按顺序）访问固定大小数据片（chunks）
+>
+> 字符型设备：键盘
+>
+> 块设备：硬盘
+
 基本概念
 
 * 申请设备号
 
+	<img src="https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210425152859503.png" alt="image-20210425152859503" style="zoom: 50%;" />
+
 * 定义文件操作结构体 file_operations
 
-	![image-20210422152900130](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210422152900130.png)
+	<img src="https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210422152900130.png" alt="image-20210422152900130" style="zoom: 67%;" />
 
 * 创建并初始化定义结构体 cdev
 
+	`cdev_alloc();`
+
+	`void cdev_init(struct cdev *cdev, struct  file_operations *fops);`
+
 * 将cdev注册到系统，并和对应的设备号绑定
+
+	注册`int cdev_add(struct cdev *dev, dev_t num,  unsigned int count);`
+
+	释放`int cdev_del(struct cdev *dev);`
 
 * 在/dev文件系统中用mknod创建设备文件， 并将该文件绑定到设备号上
 
+	mknod /dev/[文件名] [主设备号] [副设备号|0]
+
 # 命令集合
 
+### 安装
 
+apt-get command
+
+dpkg 
+
+### 虚拟终端
+
+ctrl+alt+fn
+
+VT 1-6: text mode logins 
+
+VT 7: graphical mode login prompt (if enabled)
+
+### 基础命令
+
+* passwd: Change your password 
+* mkpasswd: Generate a random password 
+* date, cal: Find out today’s date and display a  calendar 
+* who, finger: Find out who else is active on the  system 
+* clear: Clear the screen 
+* echo: Write a message to your scree 
+* write, wall, talk; mesg
+* whoami：用于显示自身用户名称。
+* who：用于显示系统中有哪些使用者正在上面
+
+### 目录操作
+
+* pwd: print working directory 
+* cd: change directory 
+* mkdir: make directory 
+* rmdir: remove directory 
+* ls: list the contents of directories 
+	* -l, -a, -R options
+
+### 文件操作
+
+* 列出目录内容: ls, dir, vdir
+* 创建特殊文件: mkdir, mknod, mkfifo 
+	* mkdir [-p 确保目录名称存在，不存在的就建一个。]
+	* mknod 申请设备文件 mknod DEVNAME {b | c} MAJOR MINOR
+	* mkfifo 创建命名管道https://www.cnblogs.com/old-path-white-cloud/p/11685558.html
+* 文件操作: cp, mv, rm 
+* 修改文件属性: chmod, chown, chgrp, touch 
+* 查找文件: locate, find 
+* 字符串匹配: grep(egrep) 
+* 其它: pwd, cd, ar, file, tar, more, less, head, tail,  cat
+* comm https://www.runoob.com/linux/linux-comm-comm.html
+
+[Linux 命令中 more、less、head、tail 命令的用法](https://blog.csdn.net/qq_15256443/article/details/81664081)
+
+### 进程相关
+
+* ps: report process status 
+
+* pstree: display a tree of processes 
+
+* jobs, fg, bg, : job controlling 
+
+	https://blog.csdn.net/lakeheart879/article/details/84326472
+
+* kill:  
+
+* nohup: run a command, ignoring hangup  signals 
+
+* nice, renice:  
+
+* top: display top CPU processes
+
+### 高级命令与正则表达式
+
+> 待补充
+
+* find
+* sed
+
+* grep
+
+	https://www.runoob.com/linux/linux-comm-grep.html
+
+	如果是文件夹，-r，以递归的方式查找符合条件的文件，并打印出该字符串所在行的内容，使用的命令为
+
+	-v，不包含
+
+	可以使用正则表达式，如`grep -n '2019-10-24 00:01:11' *.log`，查看符合条件的日志条目
+
+### gcc
+
+* Usage: 
+	* gcc [options] [filename] 
+* Basic options: 
+	* -E: 只对源程序进行预处理(调用cpp预处理器) 
+	* -S: 只对源程序进行预处理、编译 
+	* -c: 执行预处理、编译、汇编而不链接 
+	* -o output_file: 指定输出文件名 
+	* -g: 产生调试工具必需的符号信息 
+	* -O/On: 在程序编译、链接过程中进行优化处理 
+	* -Wall: 显示所有的警告信息
+	* -Idir: 指定额外的头文件搜索路径 
+	* -Ldir: 指定额外的库文件搜索路径 
+	* -lname: 链接时搜索指定的库文件 
+	* -DMACRO[=DEFN]: 定义MACRO宏
+
+### 内核模块
+
+insmod
+
+rmmod
+
+modprobe
+
+modprobe -r 
+
+https://www.cnblogs.com/klb561/p/9236420.html
 
 # 企业题目
 

@@ -109,7 +109,7 @@
 
 * JPA：需要有EntityManager
 
-	接口继承JpaRepository或CRUDRepository
+	接口继承JpaRepository或CrudRepository
 
 	* 查询方法使用领域特定语言  查询动词：get、read、find、count
 
@@ -147,7 +147,7 @@
 
 HTTP协议的四个操作方式的动词：GET、POST、PUT、DELETE 
 
-* CRUD：Create、Read、Update、Delete
+* CRUD：Create、Retrieve、Update、Delete
 
 ### 微服务开发相关注解
 
@@ -522,7 +522,7 @@ Spring Cloud Config ：文件系统、Git、Eureka、Consul
 
 3. 将请求转到controller，请求处理，将参数转为合适的Java对象，然后找到Service进行处理（Service可能会做数据的持久化等），并将结果返回给controller
 
-4. 返回model和view
+4. 返回model和logical view name
 
 5. 根据view找到视图解析器，把model传过去
 
@@ -546,7 +546,7 @@ Spring Cloud Config ：文件系统、Git、Eureka、Consul
 
 微服务的特征有：
 
-1. 将应用程序分解为具有明确定义了职责范围的细粒度组件 
+1. 将应用程序分解为具有明确定义的职责范围的细粒度组件 
 2. 完全独立部署，独立测试，并可复用 
 3. 使用轻量级通信协议，HTTP和JSON，松耦合 
 4. 服务实现可使用多种编程语言和技术 
@@ -573,8 +573,21 @@ Spring Cloud Config ：文件系统、Git、Eureka、Consul
 	当系统中的服务突然挂了或者新增加，注册服务可以发现
 
 	两个重要工具：EurekaClient、Ribbon，可以做到负载均衡，向服务代理进行最新状态查询
+	
+	对于远程访问不可用的情况下，客户端可以采取四个措施：
+	
+	* 客户端负载均衡：Ribbon每隔30s从eureka server获取服务
+	* fallback：服务不可用时走其他路径，可能访问不同的服务
+	* 舱壁隔离模式：hystrix 默认共用一个线程池，如果某一个服务不可用，线程池会被占满。每个访问服务的地方单独定义一个线程池，以此不影响其他服务
+	* 断路器模式：一段时间进行一次统计，失败次数达到阈值，会进行熔断，报错或者进入后备模式；有一个sleep时间，时间到了以后进行重试 
+	
 
 ### Eureka Ribbon Zuul相互关系
+
+1. Eureka用于服务注册与发现，其他服务可以向eureka server注册自己的信息，也可获取已注册服务的相关信息（实例有哪些、IP地址、端信息） 
+2. Ribbon部署于服务器调用方，通过Eureka Client向Eureka Server端请求已部署服务信息，将信息缓存于本地，并实现负载均衡能力，按照要求选择服务实例 
+3. Feign可以简化服务调用，需要强依赖于ribbon，主要用于简化编程 
+4. Zuul向客户端提供了统一的网关入口，使得微服务不需要暴露自己的地址，由zuul统一进行路由转发。zuul还可进行用户授权认证、日志、数据收集。主要是借助Eureka Server获取所有微服务实例，借助Ribbon调用服务（负载均衡），在处理异常情况时就依赖于hystrix进行处理，同时通过feign简化对于服务的调用过程（只需定义接口）
 
 eurekaclient ribbon feign zuul如何配合？
 
@@ -662,6 +675,11 @@ eurekaclient ribbon feign zuul如何配合？
 	网关，可以做用户认证和授权，静态路由、动态路由，数据收集，日志等
 
 	Zuul服务内部可以带Ribbon进行负载均衡，对外部请求做负载均衡
+	
+	```
+	zuul.routes.user.path: /user/**
+	zuul.routes.user.url: http://localhost:8081,http://www.baidu.com
+	```
 
 > Zuul是总的入口
 >
