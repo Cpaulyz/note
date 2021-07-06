@@ -1,5 +1,9 @@
 # OS
 
+[TOC]
+
+
+
 ## 谈谈你对OS的理解
 
 从OS发展的角度来看
@@ -395,3 +399,16 @@ int main()
 ![image-20210323162010344](https://cyzblog.oss-cn-beijing.aliyuncs.com/image-20210323162010344.png)
 
 注：栈是高地址到低地址生长的
+
+## 计算机启动过程
+
+https://www.cnblogs.com/adamwong/p/10582183.html
+
+https://blog.csdn.net/wuli_dear_wang/article/details/86244344
+
+1. BIOS。通电后，计算机会首先加载BIOS，包含硬件自检(Power-On Self Test,POST)
+2. 完成POST之后，BIOS需要在硬盘、光驱、软驱等地方搜寻操作系统内核的位置以启动操作系统。
+3. 若是从硬盘，则将主引导MBR（硬盘的第一个扇区）载入到内存地址0x7c00的位置并且跳转到这一地址开始执行MBR中的指令。
+4. 启动Boot Loader（Loader是为了打破Boot 512MB的限制）
+5. 加载Kernal。以Linux为例，先载入/boot目录下面的kernel。内核加载成功后，第一个运行的程序是/sbin/init
+
