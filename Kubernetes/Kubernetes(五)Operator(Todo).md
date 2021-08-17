@@ -53,8 +53,6 @@ operator工程新建完成后，会新增不少文件和目录，以下几个是
 * config/manager：一些和manager有关的细节配置，例如镜像的资源限制；
 * config/rbac：顾名思义，如果像限制operator在kubernetes中的操作权限，就要通过rbac来做精细的权限配置了，这里面就是权限配置的细节；
 
-> TODO
-
 ## 3 实战
 
 ### 3.1 需求
@@ -128,7 +126,7 @@ type ElasticWebStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	RealQPS *int32 `json:"real_qps"`
+	RealQPS *int32 `json:"realQPS,omitempty"`
 }
 
 // +kubebuilder:object:root=true
@@ -592,3 +590,10 @@ spec:
 * 最后测试删除，`kubectl delete elasticwebs elasticweb-sample -n dev`，可以看到所有的相关资源都被自动释放了。
 
 <img src="https://cyzblog.oss-cn-beijing.aliyuncs.com/ali-mac/image-20210817151007996.png" alt="image-20210817151007996" style="zoom:50%;" />
+
+### 3.6 清空环境
+
+* 删除elasticweb资源对象：`kubectl delete -f config/samples/webapp_v1_elasticweb.yaml`
+* 删除controller：`kustomize build config/default | kubectl delete -f -`
+* 删除CRD：`make uninstall`
+
