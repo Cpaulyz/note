@@ -74,6 +74,8 @@ CPU有两个状态，分别是管态和目态，
 * 系统异常：执行陷入指令而触发系统调用
 	* 请求设备、请求IO、创建进程等
 
+![image-20210911212743420](https://cyzblog.oss-cn-beijing.aliyuncs.com/ali-mac/image-20210911212743420.png)
+
 ## 中断的实现机制？
 
 中断需要软硬件配置
